@@ -55,6 +55,7 @@ class Solver {
     public static void main(final String[] args) throws FileNotFoundException {
         final File input = new File("C:\\Users\\k3v1n\\Documents\\adventOfCode\\6\\DaySixPuzzle.txt");
         final Map<Point, Set<Point>> givenPoints = new HashMap<>();
+        final Set<Point> lessDistance = new HashSet<>();
 
         int maxX = 0;
         int maxY = 0;
@@ -85,6 +86,15 @@ class Solver {
                         newSet.add(givenPoint);
                         distanceToPoints.put(distance, newSet);
                     }
+                }
+
+                int sumDistance = 0;
+                for (final int distance : distanceToPoints.keySet()) {
+                    sumDistance += distance * distanceToPoints.get(distance).size();
+                }
+
+                if (sumDistance < 10000) {
+                    lessDistance.add(currentPoint);
                 }
 
                 int minDistance = distanceToPoints.keySet().stream().min(Integer::compare).get();
@@ -137,5 +147,7 @@ class Solver {
         }
 
         System.out.println(max);
+
+        System.out.println(lessDistance.size());
     }
 }
