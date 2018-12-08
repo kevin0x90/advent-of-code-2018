@@ -49,22 +49,22 @@ class Header {
 class Node implements Comparable<Node> {
     private final int id;
     private final Header header;
-    private final Set<Node> childNodes;
+    private final Map<Integer, Node> childNodes;
     private final List<Integer> metadata;
 
     public Node(final Header header, final int id) {
         this.id = id;
         this.header = header;
-        childNodes = new TreeSet<>();
+        childNodes = new TreeMap<>();
         metadata = new ArrayList<>();
     }
 
     public void fill(final Scanner scanner) {
         for (int i = 0; i < header.getNumberOfChildNodes(); ++i) {
             final Header childHeader = new Header(scanner.nextInt(), scanner.nextInt());
-            final Node childNode = new Node(childHeader, id + i + 1);
+            final Node childNode = new Node(childHeader, i + 1);
             childNode.fill(scanner);
-            childNodes.add(childNode);
+            childNodes.put(childNode.id, childNode);
         }
 
         for (int i = 0; i < header.getNumberOfMetadataEntries(); ++i) {
@@ -75,8 +75,25 @@ class Node implements Comparable<Node> {
     public int getSumOfMetadata() {
         int sum = metadata.stream().reduce(0, Integer::sum);
 
-        for (final Node childNode : childNodes) {
+        for (final Node childNode : childNodes.values()) {
             sum += childNode.getSumOfMetadata();
+        }
+
+        return sum;
+    }
+
+    public int getNodeValue() {
+        int sum = 0;
+
+        if (header.getNumberOfChildNodes() == 0) {
+            return metadata.stream().reduce(0, Integer::sum);
+        }
+
+        for (final int data : metadata) {
+            final Node childNode = childNodes.get(data);
+            if (childNode != null) {
+                sum += childNode.getNodeValue();
+            }
         }
 
         return sum;
@@ -120,10 +137,11 @@ class Solver {
         try (final Scanner scanner = new Scanner(input)) {
             while (scanner.hasNext()) {
                 final Header rootHeader = new Header(scanner.nextInt(), scanner.nextInt());
-                final Node rootNode = new Node(rootHeader, 0);
+                final Node rootNode = new Node(rootHeader, 1);
                 rootNode.fill(scanner);
 
                 System.out.println(rootNode.getSumOfMetadata());
+                System.out.println(rootNode.getNodeValue());
             }
         }
     }
