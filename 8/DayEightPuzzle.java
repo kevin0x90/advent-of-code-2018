@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 class Header {
-    private int numberOfChildNodes;
-    private int numberOfMetadataEntries;
+    private final int numberOfChildNodes;
+    private final int numberOfMetadataEntries;
 
     public Header(final int numberOfChildNodes, final int numberOfMetadataEntries) {
         this.numberOfChildNodes = numberOfChildNodes;
@@ -103,6 +103,7 @@ class Node implements Comparable<Node> {
         return sum;
     }
 
+    @Override
     public int compareTo(final Node otherNode) {
         return Integer.compare(id, otherNode.id);
     }
