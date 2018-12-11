@@ -43,6 +43,7 @@ class Solver {
             }
         }
 
+        int seconds = 0;
         while (true) {
 
             if (maxY <= 116 && maxX <= 167) {
@@ -65,6 +66,8 @@ class Solver {
             maxY = 0;
             minY = 0;
 
+            ++seconds;
+
             for (int i = 0; i < points.size(); ++i) {
                 final Point currentPoint = points.get(i);
                 final Point currentVelocity = velocities.get(i);
@@ -79,5 +82,7 @@ class Solver {
                 minY = Math.min(minY, currentPoint.y);
             }
         }
+
+        System.out.println(seconds);
     }
 }
